@@ -14,6 +14,9 @@ private:
 	// Attributes
 	std::vector<Object3D*> objects;
 public:
+	World() = default;
+	World(const DisplayArray& arr);
+	
 	// Methods
 	void add(Object3D& object);
 	void draw() const;
