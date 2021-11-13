@@ -3,35 +3,47 @@
 #ifndef JSON_READER_CPP
 #define JSON_READER_CPP
 
+// JSONElement
+// Stream operators
+std::istream& operator>>(std::istream& is, JSONElement& element) {
+	char ch1;
+	is >> ch1;
+
+	JSONType type;
+	std::string value;
+
+	if (ch1 == '\"') {									// Quote Start
+		while (is >> ch1 && ch1 != '\"') value += ch1;
+		if (ch1 != '\"') throw BadJSONPair{};			// Quote End
+		type = JSONType::STRING;
+	} else {											// Number Start
+		is.putback(ch1);
+		double d;
+		is >> d;
+		value = to_string(d);
+		type = JSONType::NUMBER;
+	}													// Number End
+
+	element = { std::move(type), std::move(value) };
+	return is;
+}
+
+std::ostream& operator<<(std::ostream& os, const JSONElement& element) {
+	if (element.type == JSONType::STRING) return os << '\"' << element.value << '\"';
+	else if (element.type == JSONType::NUMBER) return os << element.value;
+	return os << element.value;
+}
+
 // JSONPair
 // Stream operators
 std::istream& operator>>(std::istream& is, JSONPair& pair) {
 	char ch1;
-	is >> ch1;
-	if (ch1 != '\"') throw BadJSONPair{};
 
-	// Read Key
-	std::string k;
-	while (is >> ch1 && ch1 != '\"') k += ch1;
-	if (ch1 != '\"') throw BadJSONPair{};
-
-	// Close Quote + Equals
-	is >> ch1;
+	JSONElement key, value;
+	is >> key >> ch1 >> value;
 	if (ch1 != ':') throw BadJSONPair{};
 
-	std::string v;		// Read String
-	is >> ch1;
-	if (ch1 == '\"') {
-		while (is >> ch1 && ch1 != '\"') v += ch1;
-		if (ch1 != '\"') throw BadJSONPair{};
-	} else {			// Read value
-		is.putback(ch1);
-		float f;
-		is >> f;
-		v = to_string(f);
-	}
-
-	pair = { k, v };
+	pair = { std::move(key), std::move(value) };
 
 	return is;
 }
@@ -39,7 +51,8 @@ std::istream& operator>>(std::istream& is, JSONPair& pair) {
 // JSONObject
 // Methods
 bool JSONObject::has(const std::string& key) const { 
-	return map.find(key) != map.end(); 
+	const JSONElement e{ JSONType::STRING, key };		// bad, fix this later
+	return map.find(e) != map.end(); 
 }
 
 // Stream operators
@@ -66,7 +79,7 @@ std::ostream& operator<<(std::ostream& os, const JSONObject& obj) {
 	const size_t len = obj.map.size();
 	size_t i = 0;
 	for (const auto& kp : obj.map) {
-		os << "\"" << kp.first << ": " << "\"" << kp.second << "\"";
+		os << kp.first << ": " << kp.second;
 		++i;
 		if (i < len) os << ", ";
 	}
