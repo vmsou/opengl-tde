@@ -1,11 +1,22 @@
 #include "Object/World.hpp"
 
+template <typename T>
+Object3D& make(const DisplayFile& df) { return T::create(df); }
+
 // Constructors
 World::World(const DisplayArray& dArr) {
 	for (const DisplayFile& df : dArr) {
-		if (df.type == 1) this->add(Disc::create(df));
-		else if (df.type == 2) this->add(Cone::create(df));
-
+		switch (df.type) {
+			case 1:
+				this->add(make<Disc>(df));
+				break;
+			case 2:
+				this->add(make<Cone>(df));
+				break;
+			case 3:
+				this->add(make<Tetrahedron>(df));
+				break;
+		}
 	}
 }
 
