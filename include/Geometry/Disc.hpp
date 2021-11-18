@@ -22,6 +22,7 @@ public:
 	Disc(int sides, double radius, const v3f& pos, const c4f& c1, const c4f& c2, int dir);
 
 	// Methods
+	const char* name() const override { return "Disco"; }
 	void draw() const override;
 };
 
