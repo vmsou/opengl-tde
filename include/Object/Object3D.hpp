@@ -29,8 +29,12 @@ public:
 	Object3D(float x, float y, float z);
 
 	// Methods
+	virtual const char* name() const { return "OBJETO"; }
 	virtual void draw() const;
 	virtual void update(const OBJ_MODIFIERS& mdf);
+	virtual void menu(int num) {
+		if (num == 0) enabled = enabled ? false : true;
+	}
 	void rotateY(v3f* v) const;
 
 	template <size_t Length>
