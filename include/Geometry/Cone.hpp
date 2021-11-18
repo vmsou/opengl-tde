@@ -22,6 +22,7 @@ public:
 	Cone(double height, int sides, double radius, v3f pos, c4f c1, c4f c2);
 
 	// Methods
+	const char* name() const override { return "Cone"; }
 	void draw() const override;
 	void update(const OBJ_MODIFIERS& mdf) override { this->modifiers = mdf; base.update(mdf); }
 };
