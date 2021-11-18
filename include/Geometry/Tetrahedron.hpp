@@ -16,6 +16,7 @@ public:
 	Tetrahedron(float size, const v3f& pos, const c4f& c1);
 
 	// Methods
+	const char* name() const override { return "Tetraedro"; }
 	void draw() const override;
 
 	template <size_t Length>
