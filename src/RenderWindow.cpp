@@ -1,10 +1,13 @@
 #include <Windows.h>
+#include <functional>
+
 #include "Utils.hpp"
 #include "RenderWindow.hpp"
 #include "v3f.hpp"
 #include "Object/World.hpp"
 #include "DisplayReader.hpp"
 #include "Geometry/Shapes.hpp"
+
 #ifndef RENDER_WINDOW_CPP
 #define RENDER_WINDOW_CPP
 
@@ -12,6 +15,10 @@ struct Camera {
 	v3f eye;
 	v3f center;
 	v3f up;
+};
+
+struct Menu {
+	int MAIN_MENU, SELECT_MENU, OBJECT_MENU, VALUE, WINDOW;
 };
 
 Camera cam{
@@ -30,24 +37,67 @@ GLfloat aspect = width / (GLfloat)height;
 GLfloat angleV = 45.0f, angleX = 0.0f, angleY = 0.0f, angleZ = 0.0f;
 
 GLfloat nRange = 200;
-World world{};
+World world;
 
 OBJ_MODIFIERS obj_mdf{ true, 0};							// grid, angleY
 SCENE_MODIFIERS scn_mdf{ true, true, true, true };			// light, camera_rotate, shade_flat, cull_face
 
-c4f lightPos{ 0.0f, 150.0f, 500.0f, 1.0f };
+// c4f lightPos{ 0.0f, 150.0f, 500.0f, 1.0f };
 
+Menu menus;
+
+Object3D* context;
+
+void menu(int num) {
+	if (num == 0) exit(0);
+	else menus.VALUE = num;
+}
+
+void object_menu(int num) {
+	if (num == 0) {
+		context->enabled = context->enabled ? false : true;
+		glutSetMenu(menus.OBJECT_MENU);
+		glutRemoveMenuItem(1);
+		glutAddMenuEntry(context->enabled ? "Desativar" : "Ativar", 0);
+	}
+}
+
+void objects_menu(int num) {
+	context = world.objects[num];
+	std::cout << "Selecionado: " << context->name() << '\n';
+	glutSetMenu(menus.MAIN_MENU);
+	if (context) glutRemoveMenuItem(3);		// Remove 'object' entry
+
+	// OBJECT MENU
+	menus.OBJECT_MENU = glutCreateMenu(object_menu);
+	if (context) glutAddMenuEntry(context->enabled ? "Desativar" : "Ativar", 0);
+	glutSetMenu(menus.MAIN_MENU);
+	if (context) glutAddSubMenu(context->name(), menus.OBJECT_MENU);
+}
+	
+void createGLUTMenus() {
+	// SELECT MENU
+	menus.SELECT_MENU = glutCreateMenu(objects_menu);
+	int id = 0;
+	for (const Object3D* obj : world.objects) {
+		glutAddMenuEntry(obj->name(), id);
+		++id;
+	}
+
+
+	// MAIN MENU
+	menus.MAIN_MENU = glutCreateMenu(menu);
+	glutAddSubMenu("Select", menus.SELECT_MENU);
+	glutAddMenuEntry("Quit", 0);
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
+}
 
 void RenderWindow::init() {
 	DisplayArray dArr(".\\resource\\scene.txt");
 	std::cout << "Scene:\n";
 	std::cout << dArr << "\n\n";
-
-	for (const DisplayFile& df : dArr) {
-		if (df.type == 1) world.add(Disc::create(df));
-		else if (df.type == 2) world.add(Cone::create(df));
-			
-	}
+	
+	world = World(dArr);
 }
 
 
@@ -120,7 +170,7 @@ RenderWindow::RenderWindow(const char* title, int argc, char* argv[]) {
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specularity);
-	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+	// glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_LIGHTING);
@@ -137,6 +187,7 @@ RenderWindow::RenderWindow(const char* title, int argc, char* argv[]) {
 	glutMouseWheelFunc(&on_mouse_wheel);	// scroll
 
 	init();
+	createGLUTMenus();
 }
 
 void RenderWindow::run() { glutMainLoop(); }
