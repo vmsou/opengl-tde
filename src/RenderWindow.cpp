@@ -57,22 +57,25 @@ void object_menu(int num) {
 	if (num == 0) {
 		context->enabled = context->enabled ? false : true;
 		glutSetMenu(menus.OBJECT_MENU);
-		glutRemoveMenuItem(1);
-		glutAddMenuEntry(context->enabled ? "Desativar" : "Ativar", 0);
+		glutChangeToMenuEntry(1, context->enabled ? "Desativar" : "Ativar", 0);
 	}
 }
 
 void objects_menu(int num) {
-	context = world.objects[num];
-	std::cout << "Selecionado: " << context->name() << '\n';
-	glutSetMenu(menus.MAIN_MENU);
-	if (context) glutRemoveMenuItem(3);		// Remove 'object' entry
-
-	// OBJECT MENU
-	menus.OBJECT_MENU = glutCreateMenu(object_menu);
-	if (context) glutAddMenuEntry(context->enabled ? "Desativar" : "Ativar", 0);
-	glutSetMenu(menus.MAIN_MENU);
-	if (context) glutAddSubMenu(context->name(), menus.OBJECT_MENU);
+	// Create Object Menu
+	if (!context) {
+		context = world.objects[num];
+		std::cout << "Selecionado: " << context->name() << '\n';
+		menus.OBJECT_MENU = glutCreateMenu(object_menu);
+		glutAddMenuEntry(context->enabled ? "Desativar" : "Ativar", 0);
+		glutSetMenu(menus.MAIN_MENU);
+		glutAddSubMenu(context->name(), menus.OBJECT_MENU);
+	} else {
+		context = world.objects[num];
+		std::cout << "Selecionado: " << context->name() << '\n';
+		glutSetMenu(menus.MAIN_MENU);
+		glutChangeToSubMenu(3, context->name(), menus.OBJECT_MENU);
+	}
 }
 	
 void createGLUTMenus() {
