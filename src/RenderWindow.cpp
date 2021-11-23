@@ -96,11 +96,22 @@ void createGLUTMenus() {
 }
 
 void RenderWindow::init() {
-	DisplayArray dArr(".\\resource\\scene.txt");
+	auto& bule = make_callback_obj(&glutSolidTeapot, v3f{ -100, 100, 0 }, getColor("red"), 30.0f);
+	auto& toroide = make_callback_obj(&glutSolidTorus, v3f{ -100, -100, 0 }, getColor("red"), 10, 30, 20, 20);
+	auto& xicara = make_callback_obj(&glutSolidTeacup, v3f{ 100.0f, 100.0f, 0.0f }, getColor("blue"), 30.0f);
+	auto& colher = make_callback_obj(&glutSolidTeaspoon, v3f{ 100.0f, -100.0f, 0.0f }, getColor("blue"), 100.0f);
+	toroide.frontFace = GL_CCW;
+
+	DisplayArray dArr(source_file);
 	std::cout << "Scene:\n";
 	std::cout << dArr << "\n\n";
 	
 	world = World(dArr);
+
+	world.add(bule);
+	world.add(toroide);
+	world.add(xicara);
+	world.add(colher);
 }
 
 
@@ -138,7 +149,9 @@ void grid() {
 }
 
 
-RenderWindow::RenderWindow(const char* title, int argc, char* argv[]) {
+RenderWindow::RenderWindow(const char* title, int argc, char* argv[], char* source_file) {
+	this->source_file = source_file;
+
 	glutInit(&argc, argv);
 
 	// Make the Window
