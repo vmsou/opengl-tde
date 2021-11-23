@@ -21,6 +21,7 @@ public:
 	Cylinder(double size, int sides, int sections, double radius, const v3f& pos, const c4f& c1);
 
 	// Methods
+	const char* name() const override { return "Cilindro"; }
 	void draw() const override;
 	void update(const OBJ_MODIFIERS& mdf) override { this->modifiers = mdf; d1.update(modifiers); d2.update(modifiers); }
 };
