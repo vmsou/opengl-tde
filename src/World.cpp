@@ -7,6 +7,9 @@ Object3D& make(const DisplayFile& df) { return T::create(df); }
 World::World(const DisplayArray& dArr) {
 	for (const DisplayFile& df : dArr) {
 		switch (df.type) {
+			case 0:
+				this->add(make<LightSource>(df));
+				break;
 			case 1:
 				this->add(make<Disc>(df));
 				break;
@@ -15,6 +18,12 @@ World::World(const DisplayArray& dArr) {
 				break;
 			case 3:
 				this->add(make<Tetrahedron>(df));
+				break;
+			case 4:
+				this->add(make<Cylinder>(df));
+				break;
+			case 5:
+				this->add(make<Cube>(df));
 				break;
 		}
 	}
