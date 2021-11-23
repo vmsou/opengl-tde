@@ -8,9 +8,25 @@
 
 /* Global variables */
 char title[] = "OpenGL-PUC PR (TDE 3)";
+char display_file[] = ".\\resource\\scene.txt";
+
+// Display File
+/*
+| ID | POSITION | COLOR | DATA (JSON) |
+
+// Objects
+| ID | NAME |
+  0	   Luz
+  1	   Disco	
+  2	   Cone
+  3    Tetraedro
+  4    Cilindro
+  5	   Cubo
+*/
 
 void info() {
 	std::cout << "\nControles:\n";
+	std::cout << "Botão do Meio - Menu";
 	std::cout << "F1 - Shade Flat/Smooth\n";
 	std::cout << "F2 - Rotacionar Camera/Objeto\n";
 	std::cout << "G - Ativar/Desativar Grid\n";
@@ -25,7 +41,7 @@ void info() {
 int main(int argc, char** argv) {
 	std::cout << "Start\n";
 
-	RenderWindow rw = RenderWindow{ title, argc, argv };
+	RenderWindow rw = RenderWindow{ title, argc, argv, display_file };
 	print_version();
 	info();
 
