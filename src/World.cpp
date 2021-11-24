@@ -33,8 +33,17 @@ World::World(const DisplayArray& dArr) {
 void World::add(Object3D& object) { objects.push_back(&object); }
 
 void World::draw() const {
-	for (const Object3D* obj : objects)
-		obj->draw();
+	for (const Object3D* obj : objects) {
+		if (obj->enabled) obj->draw();
+		if (obj->selected) {
+			glPushMatrix();
+			glColor3f(obj->c1);
+			glTranslatef(obj->pos);
+			glutWireCube(100);
+			glPopMatrix();
+		}
+	}
+		
 }
 
 void World::update(OBJ_MODIFIERS obj_mdf) const {
