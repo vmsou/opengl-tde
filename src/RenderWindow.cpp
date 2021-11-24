@@ -288,10 +288,13 @@ void RenderWindow::update(int value) {
 	}
 
 	// Hold
-	if (GetAsyncKeyState((unsigned short)'W') & 0x8000) angleX += 2.0f; 
-	if (GetAsyncKeyState((unsigned short)'A') & 0x8000) angleY += 2.0f;
-	if (GetAsyncKeyState((unsigned short)'S') & 0x8000) angleX -= 2.0f;
-	if (GetAsyncKeyState((unsigned short)'D') & 0x8000) angleY -= 2.0f;
+	if (context) {
+		if (GetAsyncKeyState((unsigned short)'W') & 0x8000) context->pos.y += 2.0f;
+		if (GetAsyncKeyState((unsigned short)'A') & 0x8000) context->pos.x -= 2.0f;
+		if (GetAsyncKeyState((unsigned short)'S') & 0x8000) context->pos.y -= 2.0f;
+		if (GetAsyncKeyState((unsigned short)'D') & 0x8000) context->pos.x += 2.0f;
+	}
+	
 
 	world.update(obj_mdf);
 
