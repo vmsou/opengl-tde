@@ -23,7 +23,10 @@ public:
 	// Methods
 	const char* name() const override { return "Cilindro"; }
 	void draw() const override;
-	void update(const OBJ_MODIFIERS& mdf) override { this->modifiers = mdf; d1.update(modifiers); d2.update(modifiers); }
+	void update(const OBJ_MODIFIERS& mdf) override { 
+		this->modifiers = mdf; d1.update(modifiers); d2.update(modifiers); 
+		d1.pos = pos; d2.pos = pos + v3f{ 0, 0, float(size) };
+	}
 };
 
 #endif
