@@ -65,13 +65,16 @@ void objects_menu(int num) {
 	// Create Object Menu
 	if (!context) {
 		context = world.objects[num];
+		context->selected = true;
 		std::cout << "Selecionado: " << context->name() << '\n';
 		menus.OBJECT_MENU = glutCreateMenu(object_menu);
 		glutAddMenuEntry(context->enabled ? "Desativar" : "Ativar", 0);
 		glutSetMenu(menus.MAIN_MENU);
 		glutAddSubMenu(context->name(), menus.OBJECT_MENU);
 	} else {
+		context->selected = false;
 		context = world.objects[num];
+		context->selected = true;
 		std::cout << "Selecionado: " << context->name() << '\n';
 		glutSetMenu(menus.MAIN_MENU);
 		glutChangeToSubMenu(3, context->name(), menus.OBJECT_MENU);
