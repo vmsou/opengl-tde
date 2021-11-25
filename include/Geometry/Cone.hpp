@@ -24,7 +24,7 @@ public:
 	// Methods
 	const char* name() const override { return "Cone"; }
 	void draw() const override;
-	void update(const OBJ_MODIFIERS& mdf) override { this->modifiers = mdf; base.update(mdf); }
+	void update(const OBJ_MODIFIERS& mdf) override { PooledObject3D::update(mdf); base.update(mdf); base.pos = pos; }
 };
 
 #endif
