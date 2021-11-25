@@ -49,6 +49,6 @@ void World::draw() const {
 void World::update(OBJ_MODIFIERS obj_mdf) const {
 	for (Object3D* obj : objects) {
 		obj->update(obj_mdf);
-		obj->vel += gravity;
+		if (!obj->anchored) obj->vel += gravity;
 	}
 }
