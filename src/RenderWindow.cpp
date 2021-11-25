@@ -165,7 +165,7 @@ void grid() {
 }
 
 
-RenderWindow::RenderWindow(const char* title, int argc, char* argv[], char* source_file) {
+RenderWindow::RenderWindow(const char* title, int argc, char* argv[], const char* source_file) {
 	this->source_file = source_file;
 
 	glutInit(&argc, argv);
