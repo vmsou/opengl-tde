@@ -6,9 +6,9 @@
 
 class RenderWindow {
 public:
-	char* source_file;
+	const char* source_file;
 public:
-	RenderWindow(const char* title, int argc, char* argv[], char* source_file);
+	RenderWindow(const char* title, int argc, char* argv[], const char* source_file);
 
 	/* Main Loop */
 	static void run();
