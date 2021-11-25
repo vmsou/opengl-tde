@@ -40,7 +40,7 @@ GLfloat nRange = 200;
 World world;
 
 OBJ_MODIFIERS obj_mdf{ true, 0};							// grid, angleY
-SCENE_MODIFIERS scn_mdf{ true, true, true, true };			// light, camera_rotate, shade_flat, cull_face
+SCENE_MODIFIERS scn_mdf{ true, true, true, true, false };	// light, camera_rotate, shade_flat, cull_face, ortho_projection
 
 // c4f lightPos{ 0.0f, 150.0f, 500.0f, 1.0f };
 
@@ -105,7 +105,7 @@ void createGLUTMenus() {
 }
 
 void RenderWindow::init() {
-	auto& cubo = Cube::create(75, v3f{}, getColor("blue"));
+	auto& cubo = Cube::create(75.0f, v3f{}, getColor("blue"));
 	cubo.vel = v3f{ 1, 0.2f, 0.3f };
 	cubo.anchored = false;
 
@@ -241,13 +241,20 @@ void RenderWindow::render() {
 }
 
 void RenderWindow::setVisParam() {
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(angleV, aspect, 0.1f, 1000.0f);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
 
-	glMatrixMode(GL_MODELVIEW);        
-	glLoadIdentity();                  
-	gluLookAt(cam.eye, v3f{ 0, 0, 1 }, cam.up);
+		if (scn_mdf.ortho_projection) {						// Orthogonal
+			if (width <= height)
+				glOrtho(-nRange, nRange, -nRange * height / width, nRange * height / width, -nRange * 2, nRange * 2);
+			else
+				glOrtho(-nRange * width / height, nRange * width / height, -nRange, nRange, -nRange * 2, nRange * 2);
+		} else 
+			gluPerspective(angleV, aspect, 0.1f, 1000.0f);	// Perspective
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		gluLookAt(cam.eye, v3f{ 0, 0, 1 }, cam.up);
 }
 
 void RenderWindow::on_mouse_button(GLint button, GLint state, GLint x, GLint y) {
@@ -298,6 +305,14 @@ void RenderWindow::update(int value) {
 		scn_mdf.cull_enabled = scn_mdf.cull_enabled ? false : true;
 		if (scn_mdf.cull_enabled) glEnable(GL_CULL_FACE);
 		else glDisable(GL_CULL_FACE);
+	}
+
+	if (GetAsyncKeyState((unsigned short)'P') & 0x001) {	// Projection Orthogonal/Perspective
+		scn_mdf.ortho_projection = scn_mdf.ortho_projection ? false : true;
+		std::cout << "Projecao: ";
+		if (scn_mdf.ortho_projection) std::cout << "Ortogonal\n";
+		else std::cout << "Perspectiva\n";
+		setVisParam();
 	}
 
 	// Hold
@@ -356,6 +371,13 @@ void RenderWindow::on_size(GLint w, GLint h) {
 
 	glViewport(0, 0, width, height);
 	setVisParam();
+
+	if (scn_mdf.ortho_projection) {
+		if (width <= height)
+			glOrtho(-nRange, nRange, -nRange * height / width, nRange * height / width, -nRange * 2, nRange * 2);
+		else
+			glOrtho(-nRange * width / height, nRange * width / height, -nRange, nRange, -nRange * 2, nRange * 2);
+	}
 }
 
 #endif
