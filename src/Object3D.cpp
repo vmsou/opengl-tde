@@ -11,7 +11,22 @@ Object3D::Object3D(float x, float y, float z) : pos{ x, y, z }, modifiers{ true,
 
 // Methods
 void Object3D::draw() const {}
-void Object3D::update(const OBJ_MODIFIERS& mdf) { this->modifiers = mdf; if (!anchored) pos += vel; }
+void Object3D::update(const OBJ_MODIFIERS& mdf) {
+	this->modifiers = mdf; 
+	if (!anchored) pos += vel; 
+}
+void Object3D::corner(float high, float low) {
+	if (pos.x > high || pos.x < low) {
+		vel.x *= -1.0f;
+	}
+	if (pos.y > high || pos.y < low) {
+		vel.y *= -0.95;
+		pos.y = low;
+	}
+	if (pos.z > high || pos.z < low) {
+		vel.z *= -1.0f;
+	}
+}
 
 void Object3D::rotateY(v3f* v) const {
 	const float rad = (float)(modifiers.angleY * M_PI) / 180.0f;
