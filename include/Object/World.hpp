@@ -10,9 +10,10 @@ struct SCENE_MODIFIERS {
 };
 
 class World {
-private:
+public:
 	// Attributes
 	std::vector<Object3D*> objects;
+	v3f gravity = v3f{ 0, -0.2f, 0 };
 public:
 	World() = default;
 	World(const DisplayArray& arr);
