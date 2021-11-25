@@ -8,7 +8,7 @@
 
 /* Global variables */
 char title[] = "OpenGL-PUC PR (TDE 3)";
-char display_file[] = ".\\resource\\scene.txt";
+std::string display_file;
 
 // Display File
 /*
@@ -41,7 +41,12 @@ void info() {
 int main(int argc, char** argv) {
 	std::cout << "Start\n";
 
-	RenderWindow rw = RenderWindow{ title, argc, argv, display_file };
+	std::cout << "Display File (*.txt): ";
+	std::cin >> display_file;
+
+	std::cout << "\nFile: " << display_file << '\n';
+
+	RenderWindow rw = RenderWindow{ title, argc, argv, display_file.c_str() };
 	print_version();
 	info();
 
