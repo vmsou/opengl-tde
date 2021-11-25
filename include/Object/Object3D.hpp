@@ -20,8 +20,9 @@ public:
 	// Attributes
 	bool enabled = true;
 	bool selected = false;
+	bool anchored = true;
 
-	v3f pos;
+	v3f pos, vel = v3f{};
 	c4f c1;
 	OBJ_MODIFIERS modifiers;
 	
