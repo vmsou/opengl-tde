@@ -99,6 +99,10 @@ void createGLUTMenus() {
 }
 
 void RenderWindow::init() {
+	auto& cubo = Cube::create(75, v3f{}, getColor("blue"));
+	cubo.vel = v3f{ 1, 0.2f, 0.3f };
+	cubo.anchored = false;
+
 	auto& bule = make_callback_obj(&glutSolidTeapot, v3f{ -100, 100, 0 }, getColor("red"), 30.0f);
 	auto& toroide = make_callback_obj(&glutSolidTorus, v3f{ -100, -100, 0 }, getColor("red"), 10, 30, 20, 20);
 	auto& xicara = make_callback_obj(&glutSolidTeacup, v3f{ 100.0f, 100.0f, 0.0f }, getColor("blue"), 30.0f);
@@ -110,7 +114,10 @@ void RenderWindow::init() {
 	std::cout << dArr << "\n\n";
 	
 	world = World(dArr);
+	world.low = -nRange;
+	world.high = nRange;
 
+	world.add(cubo);
 	world.add(bule);
 	world.add(toroide);
 	world.add(xicara);
