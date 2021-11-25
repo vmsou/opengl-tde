@@ -59,6 +59,11 @@ void object_menu(int num) {
 		glutSetMenu(menus.OBJECT_MENU);
 		glutChangeToMenuEntry(1, context->enabled ? "Desativar" : "Ativar", 0);
 	}
+	if (num == 1) {
+		context->anchored = context->anchored ? false : true;
+		glutSetMenu(menus.OBJECT_MENU);
+		glutChangeToMenuEntry(2, context->anchored ? "Destravar" : "Travar", 1);
+	}
 }
 
 void objects_menu(int num) {
@@ -69,6 +74,7 @@ void objects_menu(int num) {
 		std::cout << "Selecionado: " << context->name() << '\n';
 		menus.OBJECT_MENU = glutCreateMenu(object_menu);
 		glutAddMenuEntry(context->enabled ? "Desativar" : "Ativar", 0);
+		glutAddMenuEntry(context->anchored ? "Destravar" : "Travar", 1);
 		glutSetMenu(menus.MAIN_MENU);
 		glutAddSubMenu(context->name(), menus.OBJECT_MENU);
 	} else {
