@@ -11,7 +11,7 @@ Object3D::Object3D(float x, float y, float z) : pos{ x, y, z }, modifiers{ true,
 
 // Methods
 void Object3D::draw() const {}
-void Object3D::update(const OBJ_MODIFIERS& mdf) { this->modifiers = mdf; }
+void Object3D::update(const OBJ_MODIFIERS& mdf) { this->modifiers = mdf; pos += vel; }
 
 void Object3D::rotateY(v3f* v) const {
 	const float rad = (float)(modifiers.angleY * M_PI) / 180.0f;
