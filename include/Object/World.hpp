@@ -12,6 +12,7 @@ struct SCENE_MODIFIERS {
 class World {
 public:
 	// Attributes
+	float low, high;
 	std::vector<Object3D*> objects;
 	v3f gravity = v3f{ 0, -0.2f, 0 };
 public:
