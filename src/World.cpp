@@ -49,6 +49,9 @@ void World::draw() const {
 void World::update(OBJ_MODIFIERS obj_mdf) const {
 	for (Object3D* obj : objects) {
 		obj->update(obj_mdf);
-		if (!obj->anchored) obj->vel += gravity;
+		if (!obj->anchored) {
+			obj->vel += gravity;
+			obj->corner(high, low);
+		}
 	}
 }
