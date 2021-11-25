@@ -26,12 +26,12 @@ char display_file[] = ".\\resource\\scene.txt";
 
 void info() {
 	std::cout << "\nControles:\n";
-	std::cout << "Botao Direito - Menu";
+	std::cout << "Botao Direito - Menu\n";
 	std::cout << "F1 - Shade Flat/Smooth\n";
 	std::cout << "G - Ativar/Desativar Grid\n";
-	std::cout << "L - Ativar/Desativar Iluminacao\n";
 	std::cout << "C - Ativa/Desativar Cull Face\n";
 	std::cout << "R - Resetar Camera\n";
+	std::cout << "P - Trocar projeção Ortogonal/Perspectiva\n";
 	std::cout << "Setas e Page up/down- Rotacionar Camera\n";
 	std::cout << "WASD - Movimentar objeto selecionado\n";
 	std::cout << "Roda do mouse - Zoom in/out\n";
